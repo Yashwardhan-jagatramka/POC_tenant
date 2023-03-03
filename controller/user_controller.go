@@ -18,7 +18,7 @@ import (
 	"project-tenant/responses"
 )
 
-var KEY string = "YASHPRT1"
+const KEY string = "YASHPRT1"
 
 var userCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
 var validate = validator.New()

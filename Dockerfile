@@ -1,23 +1,19 @@
-FROM golang:1.16-alpine
-
-RUN cd /User/yashwardhan.j/GolangProjects
+FROM golang:latest
 
 RUN mkdir /build
-
 WORKDIR /build
 
 COPY go.mod ./
 COPY go.sum ./
 
+COPY .. ./
+
 RUN export GO111MODULE=on
 
-RUN go get github.com/labstack/echo/v4
-RUN go get github.com/redis/go-redis/v9
-RUN go get go.mongodb.org/mongo-driver
-RUN go get gopkg.in/go-playground/validator.v9
+RUN go mod download
 
-RUN cd /build && git clone https://github.com/ritik8982/PocProject
+RUN go build -o main
 
-RUN go build -o main .
+EXPOSE 6000
 
-CMD ["/build/main"]
+CMD [ "./main" ]

@@ -6,9 +6,9 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	"project-tenant/configs"
-	"project-tenant/controller"
-	"project-tenant/routes"
+	"project-tenant/apis/controller"
+	"project-tenant/apis/routes"
+	"project-tenant/pkg/configs"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 
 	configs.ConnectDB()
 
-	routes.UserRoute(e)
+	routes.TenantRoute(e)
 
 	e.Use(middleware.Recover())
 	e.Pre(middleware.BasicAuth(func(name string, key string, context echo.Context) (bool, error) {

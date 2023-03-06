@@ -3,10 +3,10 @@ package routes
 import (
 	"github.com/labstack/echo/v4"
 
-	"project-tenant/controller"
+	"project-tenant/apis/controller"
 )
 
-func UserRoute(e *echo.Echo) {
+func TenantRoute(e *echo.Echo) {
 	// all routes related to user yaha add karna hai...
 	e.POST("/create", controller.CreateTenant)
 	e.GET("/get-tenant", controller.GetATenant)

@@ -1,6 +1,6 @@
 package models
 
-type User struct {
+type Tenant struct {
 	UniqueId        int    `json:"id,omitempty" validate:"omitempty"`
 	TenantFirstName string `json:"fname,omitempty" validate:"required"`
 	TenantLastName  string `json:"lname,omitempty" validate:"required"`

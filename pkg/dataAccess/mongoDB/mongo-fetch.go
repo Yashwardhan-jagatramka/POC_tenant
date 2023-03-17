@@ -17,7 +17,9 @@ func NewMongoF() *mongoF {
 		tenantCollection: dataAccess.TenantCollection,
 	}
 }
+
 func (db *mongoF) TotalDocs() (int, error) {
+
 	ans, err := db.tenantCollection.EstimatedDocumentCount(context.Background())
 	len := (int)(ans)
 	return len, err

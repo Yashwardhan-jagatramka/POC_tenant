@@ -20,8 +20,10 @@ func NewredisF() *redisF {
 }
 
 func (cache *redisF) Get(ctx context.Context, key string) *redis.StringCmd {
+
 	return dataAccess.Cache.Get(ctx, key)
+
 }
 func (cache *redisF) Set(ctx context.Context, key string, value interface{}, expiration time.Duration) error {
-	return dataAccess.Cache.Set(ctx, key, value, 0).Err()
+	return dataAccess.Cache.Set(ctx, key, value, expiration).Err()
 }

@@ -71,15 +71,15 @@ func GetATenant(c echo.Context, ctx context.Context, key int) (models.Tenant, er
 	}
 }
 func UpdateTenant(ctx context.Context, userId int, reqTenant models.Tenant) (*mongo.UpdateResult, error) {
-	var findUser models.Tenant
-	err1 := db.FindOne(context.Background(), bson.M{"uniqueid": userId}).Decode(&findUser)
+	var findTenant models.Tenant
+	err1 := db.FindOne(ctx, bson.M{"uniqueid": userId}).Decode(&findTenant)
 	if err1 != nil {
 		return nil, err1
 	}
 
-	update := bson.M{"$set": bson.M{"fname": findUser.TenantFirstName, "lname": findUser.TenantLastName, "location": findUser.Country, "domain": findUser.BusinessDomain, "email": findUser.OfficialEmail, "phone": findUser.OfficialPhone}}
+	update := bson.M{"fname": reqTenant.TenantFirstName, "lname": reqTenant.TenantLastName, "location": reqTenant.Country, "domain": reqTenant.BusinessDomain, "email": reqTenant.OfficialEmail, "phone": reqTenant.OfficialPhone}
 
-	result, err := db.UpdateOne(ctx, bson.M{"uniqueid": findUser.UniqueId}, update)
+	result, err := db.UpdateOne(ctx, bson.M{"uniqueid": findTenant.UniqueId}, bson.M{"$set": update})
 	reqTenant.UniqueId = userId
 
 	if err != nil {
@@ -87,7 +87,7 @@ func UpdateTenant(ctx context.Context, userId int, reqTenant models.Tenant) (*mo
 	}
 
 	userV2, _ := json.Marshal(reqTenant)
-	cacheErr := cache.Set(ctx, strconv.Itoa(findUser.UniqueId), userV2, 0)
+	cacheErr := cache.Set(ctx, strconv.Itoa(findTenant.UniqueId), userV2, 0)
 	if cacheErr != nil {
 		return nil, cacheErr
 	}

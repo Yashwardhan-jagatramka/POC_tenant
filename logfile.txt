@@ -1,0 +1,2 @@
+method=GET, uri=/get-all-tenants, status=200
+method=GET, uri=/get-all-tenants, status=200

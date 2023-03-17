@@ -27,4 +27,5 @@ func main() {
 	}))
 
 	e.Logger.Fatal(e.Start(":6000"))
+	defer routes.Logfile.Close()
 }

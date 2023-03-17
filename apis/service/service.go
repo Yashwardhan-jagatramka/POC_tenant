@@ -18,10 +18,9 @@ import (
 
 // wrapper--
 // var col mongo.DbMethods
-var db = mongoDB.NewMongoF()
-var cache = redisCache.NewredisF()
 
 func CreateTenant(ctx context.Context, reqBody models.Tenant) (*mongo.InsertOneResult, error) {
+	var db = mongoDB.NewMongoF()
 
 	ans, err := db.TotalDocs()
 	if err != nil {
@@ -31,6 +30,8 @@ func CreateTenant(ctx context.Context, reqBody models.Tenant) (*mongo.InsertOneR
 	return db.InsertOne(ctx, reqBody)
 }
 func GetAllTenants(c echo.Context, users []models.Tenant, ctx context.Context) ([]models.Tenant, error) {
+	var db = mongoDB.NewMongoF()
+
 	results, err := db.Find(ctx, bson.M{})
 	if err != nil {
 		return nil, c.JSON(http.StatusInternalServerError, models.TenantResponse{Status: http.StatusInternalServerError, Message: "error", Data: &echo.Map{"data": err.Error()}})
@@ -47,6 +48,9 @@ func GetAllTenants(c echo.Context, users []models.Tenant, ctx context.Context) (
 	return users, nil
 }
 func GetATenant(c echo.Context, ctx context.Context, key int) (models.Tenant, error) {
+	var db = mongoDB.NewMongoF()
+	var cache = redisCache.NewredisF()
+
 	user2, err3 := cache.Get(ctx, c.QueryParam("tenantId")).Result()
 	if err3 != redis.Nil {
 		var user models.Tenant
@@ -71,6 +75,9 @@ func GetATenant(c echo.Context, ctx context.Context, key int) (models.Tenant, er
 	}
 }
 func UpdateTenant(ctx context.Context, userId int, reqTenant models.Tenant) (*mongo.UpdateResult, error) {
+	var db = mongoDB.NewMongoF()
+	var cache = redisCache.NewredisF()
+
 	var findTenant models.Tenant
 	err1 := db.FindOne(ctx, bson.M{"uniqueid": userId}).Decode(&findTenant)
 	if err1 != nil {

@@ -1,19 +1,17 @@
 package routes
 
 import (
-	"os"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
 	"project-tenant/apis/controller"
+	"project-tenant/apis/logger"
 )
-
-var Logfile, _ = os.Create("logfile.txt")
 
 func TenantRoute(e *echo.Echo) {
 	// all routes related to tanent yaha add karna hai...
 
+	Logfile := logger.CreateLogFile()
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 		Output: Logfile,

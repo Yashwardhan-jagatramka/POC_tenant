@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -11,6 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/net/context"
 
+	"project-tenant/apis/logger"
 	"project-tenant/pkg/dataAccess/mongoDB"
 	"project-tenant/pkg/dataAccess/redisCache"
 	"project-tenant/pkg/models"
@@ -19,9 +21,12 @@ import (
 // wrapper--
 // var col mongo.DbMethods
 
-func CreateTenant(ctx context.Context, reqBody models.Tenant) (*mongo.InsertOneResult, error) {
-	var db = mongoDB.NewMongoF()
+var LogFile = logger.CreateLogFile()
 
+func CreateTenant(ctx context.Context, reqBody models.Tenant) (*mongo.InsertOneResult, error) {
+	log.SetOutput(LogFile)
+	log.Println("Mongo Called")
+	var db = mongoDB.NewMongoF()
 	ans, err := db.TotalDocs()
 	if err != nil {
 		return nil, err
@@ -30,6 +35,8 @@ func CreateTenant(ctx context.Context, reqBody models.Tenant) (*mongo.InsertOneR
 	return db.InsertOne(ctx, reqBody)
 }
 func GetAllTenants(c echo.Context, users []models.Tenant, ctx context.Context) ([]models.Tenant, error) {
+	log.SetOutput(LogFile)
+	log.Println("Mongo Called")
 	var db = mongoDB.NewMongoF()
 
 	results, err := db.Find(ctx, bson.M{})
@@ -48,6 +55,8 @@ func GetAllTenants(c echo.Context, users []models.Tenant, ctx context.Context) (
 	return users, nil
 }
 func GetATenant(c echo.Context, ctx context.Context, key int) (models.Tenant, error) {
+	log.SetOutput(LogFile)
+	log.Println("Mongo Called\nRedis Called")
 	var db = mongoDB.NewMongoF()
 	var cache = redisCache.NewredisF()
 
@@ -75,6 +84,8 @@ func GetATenant(c echo.Context, ctx context.Context, key int) (models.Tenant, er
 	}
 }
 func UpdateTenant(ctx context.Context, userId int, reqTenant models.Tenant) (*mongo.UpdateResult, error) {
+	log.SetOutput(LogFile)
+	log.Println("Mongo Called\nRedis Called")
 	var db = mongoDB.NewMongoF()
 	var cache = redisCache.NewredisF()
 

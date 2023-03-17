@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	"project-tenant/apis/controller"
+	"project-tenant/apis/logger"
 	"project-tenant/apis/routes"
 	"project-tenant/pkg/configs"
 )
@@ -27,5 +28,5 @@ func main() {
 	}))
 
 	e.Logger.Fatal(e.Start(":6000"))
-	defer routes.Logfile.Close()
+	logger.CloseLogFile()
 }
